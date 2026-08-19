@@ -52,6 +52,10 @@ All notable changes to GetNotified are recorded here. Format follows
 
 ### Fixed
 
+- Email over port 465 failed with a confusing handshake error. Go's SMTP client
+  starts plain and upgrades with STARTTLS, so it cannot open a connection that
+  is encrypted from the first byte. It now says to use 587 or 2525.
+
 - The front page demo shifted the whole page each cycle. Failed bars are taller
   than healthy ones, so the row grew the moment one appeared and everything
   below it jumped. The row now reserves the tallest bar's height, and the

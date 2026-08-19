@@ -18,6 +18,12 @@ func (email) Send(_ context.Context, e Event, c store.Channel) error {
 		return fmt.Errorf("email channel needs SMTP_HOST, SMTP_PORT and SMTP_FROM")
 	}
 
+	// Go's SMTP client upgrades a plain connection with STARTTLS; it cannot
+	// open one that is encrypted from the first byte, which is what 465 is.
+	if port == "465" {
+		return fmt.Errorf("port 465 is not supported — use 587 or 2525, which start plain and upgrade")
+	}
+
 	var auth smtp.Auth
 	if user := os.Getenv("SMTP_USER"); user != "" {
 		auth = smtp.PlainAuth("", user, os.Getenv("SMTP_PASS"), host)
