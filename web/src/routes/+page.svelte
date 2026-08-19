@@ -1,0 +1,69 @@
+<script lang="ts">
+	import Meta from '$lib/Meta.svelte';
+	import { HugeiconsIcon } from '@hugeicons/svelte';
+	import { PlusSignIcon } from '@hugeicons/core-free-icons';
+	import { dotClass, milliseconds, percent, statusLabel } from '$lib/format';
+
+	let { data } = $props();
+</script>
+
+<Meta
+	title="Monitors · GetNotified"
+	description="Every monitor you are running, with current status and uptime."
+	origin={data.origin}
+	noindex
+/>
+
+<div class="flex items-center justify-between">
+	<h1 class="text-xl font-semibold tracking-tight">Monitors</h1>
+	<a
+		href="/monitors/new"
+		class="flex items-center gap-1.5 rounded-md bg-stone-900 px-3 py-1.5 text-sm text-white hover:bg-stone-700"
+	>
+		<HugeiconsIcon icon={PlusSignIcon} size={16} strokeWidth={2} />
+		New monitor
+	</a>
+</div>
+
+{#if data.monitors.length === 0}
+	<p class="mt-8 text-stone-500">
+		No monitors yet. <a href="/monitors/new" class="underline">Add the first one</a>.
+	</p>
+{:else}
+	<div class="mt-6 overflow-x-auto rounded-lg border border-stone-200 bg-white">
+		<table class="w-full text-sm">
+			<thead class="border-b border-stone-200 text-left text-xs text-stone-500">
+				<tr>
+					<th scope="col" class="px-4 py-2 font-medium">Monitor</th>
+					<th scope="col" class="px-4 py-2 font-medium">Status</th>
+					<th scope="col" class="px-4 py-2 font-medium">24 hours</th>
+					<th scope="col" class="px-4 py-2 font-medium">7 days</th>
+					<th scope="col" class="px-4 py-2 font-medium">30 days</th>
+					<th scope="col" class="px-4 py-2 font-medium">Latency</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.monitors as monitor (monitor.id)}
+					<tr class="border-b border-stone-100 last:border-0 hover:bg-stone-50">
+						<td class="px-4 py-3">
+							<a href="/monitors/{monitor.id}" class="font-medium hover:underline">{monitor.name}</a>
+							<div class="truncate text-xs text-stone-500">{monitor.target}</div>
+						</td>
+						<td class="px-4 py-3">
+							<span class="inline-flex items-center gap-2">
+								<span class="size-2 rounded-full {dotClass(monitor.status, monitor.paused)}"></span>
+								{statusLabel(monitor.status, monitor.paused)}
+							</span>
+						</td>
+						<td class="numeric px-4 py-3">{percent(data.locale, monitor.up_24h)}</td>
+						<td class="numeric px-4 py-3">{percent(data.locale, monitor.up_7d)}</td>
+						<td class="numeric px-4 py-3">{percent(data.locale, monitor.up_30d)}</td>
+						<td class="numeric px-4 py-3 text-stone-500">
+							{milliseconds(data.locale, monitor.latency_ms)}
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+{/if}

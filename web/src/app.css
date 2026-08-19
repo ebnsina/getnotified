@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/mona-sans';
+@import '@fontsource-variable/geist-mono';
+
+@theme {
+	--font-sans: 'Mona Sans Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+	--color-up: oklch(0.72 0.16 152);
+	--color-down: oklch(0.62 0.2 25);
+	--color-idle: oklch(0.72 0.02 260);
+}
+
+/* Numbers read as data, so they get the mono face wherever they appear. */
+.numeric {
+	font-family: var(--font-mono);
+	font-variant-numeric: tabular-nums;
+}
+
+html {
+	font-family: var(--font-sans);
+}

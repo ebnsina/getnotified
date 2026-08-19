@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+
+# Internal planning notes and local data stay out of the public repo.
+docs/
+data/
+
+node_modules/
+web/.svelte-kit/
+web/build/
+/getnotified
