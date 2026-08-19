@@ -23,7 +23,7 @@
 	noindex
 />
 
-<h1 class="font-display text-2xl font-normal text-bright italic">New monitor</h1>
+<h1 class="page-title">New monitor</h1>
 
 <form method="POST" use:enhance={submit} class="mt-6 max-w-2xl">
 	<MonitorForm {errors} />

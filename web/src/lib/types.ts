@@ -13,9 +13,11 @@ export interface MonitorSummary {
 	up_7d: number | null;
 	up_30d: number | null;
 	latency_ms: number | null;
+	recent: boolean[];
 }
 
-export interface Monitor extends Omit<MonitorSummary, 'up_24h' | 'up_7d' | 'up_30d' | 'latency_ms'> {
+export interface Monitor
+	extends Omit<MonitorSummary, 'up_24h' | 'up_7d' | 'up_30d' | 'latency_ms' | 'recent'> {
 	org_id: string;
 	interval_seconds: number;
 	timeout_seconds: number;
@@ -25,6 +27,10 @@ export interface Monitor extends Omit<MonitorSummary, 'up_24h' | 'up_7d' | 'up_3
 	consecutive_failures: number;
 	next_check_at: string;
 	created_at: string;
+	up_24h: number | null;
+	up_7d: number | null;
+	up_30d: number | null;
+	latency_ms: number | null;
 }
 
 export interface Check {

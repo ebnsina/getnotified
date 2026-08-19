@@ -24,7 +24,7 @@ func (a *API) listMonitors(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (a *API) getMonitor(w http.ResponseWriter, r *http.Request) error {
-	m, err := store.GetMonitor(r.Context(), a.Pool, chi.URLParam(r, "id"))
+	m, err := store.GetMonitorDetail(r.Context(), a.Pool, chi.URLParam(r, "id"))
 	if err != nil {
 		return notFound(err, ErrMonitorNotFound)
 	}

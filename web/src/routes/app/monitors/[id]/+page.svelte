@@ -4,13 +4,20 @@
 	import MonitorForm from '$lib/MonitorForm.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import { PlayIcon, PauseIcon, Delete02Icon } from '@hugeicons/core-free-icons';
-	import { dateTime, duration, milliseconds, pillClass, relative, statusLabel } from '$lib/format';
+	import { dateTime, duration, milliseconds, percent, pillClass, relative, statusLabel } from '$lib/format';
 	import { validateMonitorForm } from '$lib/schemas';
 
 	let { data, form } = $props();
 	let clientErrors = $state<Record<string, string>>({});
 
 	const monitor = $derived(data.monitor);
+
+	const stats = $derived([
+		['24 hours', percent(data.locale, monitor.up_24h)],
+		['7 days', percent(data.locale, monitor.up_7d)],
+		['30 days', percent(data.locale, monitor.up_30d)],
+		['Latency', milliseconds(data.locale, monitor.latency_ms)]
+	]);
 	const errors = $derived({ ...clientErrors, ...(form?.errors ?? {}) });
 	const timeline = $derived([...data.checks].reverse());
 
@@ -27,9 +34,15 @@
 	noindex
 />
 
+<nav class="mb-4 font-mono text-xs text-dim">
+	<a href="/app" class="hover:text-bright">Monitors</a>
+	<span class="px-1.5">/</span>
+	<span class="text-mid">{monitor.name}</span>
+</nav>
+
 <div class="flex items-start justify-between gap-4">
 	<div>
-		<h1 class="font-display text-2xl font-normal text-bright italic">{monitor.name}</h1>
+		<h1 class="page-title">{monitor.name}</h1>
 		<p class="mt-2 flex flex-wrap items-center gap-2 text-sm text-dim">
 			<span class={pillClass(monitor.status, monitor.paused)}>
 				{statusLabel(monitor.status, monitor.paused)}
@@ -52,8 +65,17 @@
 	<p class="mt-4 panel px-4 py-2.5 text-sm text-mid">{form.message}</p>
 {/if}
 
+<section class="panel mt-6 grid grid-cols-2 divide-rule/60 sm:grid-cols-4 sm:divide-x">
+	{#each stats as [label, value] (label)}
+		<div class="px-5 py-4">
+			<p class="section-label">{label}</p>
+			<p class="numeric mt-1 text-lg text-bright">{value}</p>
+		</div>
+	{/each}
+</section>
+
 <section class="mt-8">
-	<h2 class="text-sm font-medium text-dim">Recent checks</h2>
+	<h2 class="section-label">Recent checks</h2>
 	<div class="mt-2 flex flex-wrap gap-1">
 		{#each timeline as check (check.id)}
 			<span
@@ -69,7 +91,7 @@
 </section>
 
 <section class="mt-8">
-	<h2 class="text-sm font-medium text-dim">Incidents</h2>
+	<h2 class="section-label">Incidents</h2>
 	{#if data.incidents.length === 0}
 		<p class="mt-2 text-sm text-dim">No incidents so far.</p>
 	{:else}
@@ -91,7 +113,7 @@
 </section>
 
 <section class="mt-8 max-w-2xl">
-	<h2 class="text-sm font-medium text-dim">Who hears about it</h2>
+	<h2 class="section-label">Who hears about it</h2>
 	{#if data.channels.length === 0}
 		<p class="mt-2 text-sm text-dim">
 			No channels set up yet. <a href="/app/channels" class="underline">Add one</a>.
@@ -118,7 +140,7 @@
 </section>
 
 <section class="mt-8 max-w-2xl">
-	<h2 class="text-sm font-medium text-dim">Settings</h2>
+	<h2 class="section-label">Settings</h2>
 	<form method="POST" action="?/update" use:enhance={submit} class="mt-2">
 		<MonitorForm {monitor} {errors} />
 		{#if errors.form}<p class="mt-4 text-sm text-down">{errors.form}</p>{/if}

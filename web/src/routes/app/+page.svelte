@@ -2,6 +2,7 @@
 	import Meta from '$lib/Meta.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import { PlusSignIcon, DashboardSquare01Icon } from '@hugeicons/core-free-icons';
+	import CheckStrip from '$lib/CheckStrip.svelte';
 	import { milliseconds, percent, pillClass, statusLabel } from '$lib/format';
 
 	let { data } = $props();
@@ -18,7 +19,7 @@
 
 <div class="flex flex-wrap items-end justify-between gap-4">
 	<div>
-		<h1 class="font-display text-2xl font-normal text-bright italic">Monitors</h1>
+		<h1 class="page-title">Monitors</h1>
 		<p class="mt-1 text-sm text-dim">
 			{#if data.monitors.length === 0}
 				Nothing is being checked yet.
@@ -52,6 +53,7 @@
 				<tr class="border-b border-rule">
 					<th scope="col" class="px-5 py-3 font-normal">Monitor</th>
 					<th scope="col" class="px-5 py-3 font-normal">Status</th>
+					<th scope="col" class="px-5 py-3 font-normal">Recent</th>
 					<th scope="col" class="px-5 py-3 text-right font-normal">24 hours</th>
 					<th scope="col" class="px-5 py-3 text-right font-normal">7 days</th>
 					<th scope="col" class="px-5 py-3 text-right font-normal">30 days</th>
@@ -72,6 +74,7 @@
 								{statusLabel(monitor.status, monitor.paused)}
 							</span>
 						</td>
+						<td class="px-5 py-4"><CheckStrip recent={monitor.recent} /></td>
 						<td class="numeric px-5 py-4 text-right text-mid">{percent(data.locale, monitor.up_24h)}</td>
 						<td class="numeric px-5 py-4 text-right text-mid">{percent(data.locale, monitor.up_7d)}</td>
 						<td class="numeric px-5 py-4 text-right text-mid">{percent(data.locale, monitor.up_30d)}</td>

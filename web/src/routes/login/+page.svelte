@@ -14,7 +14,7 @@
 
 <div class="min-h-screen bg-night text-bright">
 	<div class="mx-auto max-w-sm px-6 pt-24">
-	<h1 class="font-display text-2xl font-normal text-bright italic">Sign in</h1>
+	<h1 class="page-title">Sign in</h1>
 	<p class="mt-1 text-sm text-dim">GetNotified is for the account owner only.</p>
 
 	<form method="POST" use:enhance class="mt-6 space-y-4">

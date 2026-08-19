@@ -59,10 +59,13 @@ Returns every monitor with uptime already computed.
     "up_24h": 1.0,
     "up_7d": 0.9993,
     "up_30d": 0.9991,
-    "latency_ms": 128
+    "latency_ms": 128,
+    "recent": [true, true, false, true]
   }
 ]
 ```
+
+`recent` holds the last 24 results, oldest first.
 
 Uptime fields are ratios between 0 and 1, or `null` when nothing has been
 checked in that window.
@@ -86,7 +89,8 @@ Returns `201` and the full monitor.
 
 ### `GET /api/monitors/{id}`
 
-Returns the full monitor, including scheduling state.
+Returns the full monitor, including scheduling state and the same `up_24h`,
+`up_7d`, `up_30d` and `latency_ms` figures the list carries.
 
 ### `PATCH /api/monitors/{id}`
 

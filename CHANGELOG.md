@@ -68,6 +68,10 @@ All notable changes to GetNotified are recorded here. Format follows
 - The front page now says what the product does: what it checks, where it tells
   you, what you get, and an example of the API. It was atmosphere with no
   substance before.
+- The dashboard is set in the sans. The serif stays on the front page and the
+  status pages, where it is doing brand work rather than being read all day.
+- Each monitor in the list shows its last 24 results as a strip, and the page
+  for one monitor now shows its uptime and latency, which it never did.
 - Status reads as a pill rather than a dot and a word, and panels share the
   radius of the controls inside them.
 - Secondary buttons are outlined rather than ghosted, and the ghost variant is

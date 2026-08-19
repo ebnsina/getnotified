@@ -21,7 +21,7 @@
 		strokeWidth={1.5}
 		class="mx-auto text-dim"
 	/>
-	<h1 class="mt-4 font-display text-2xl font-normal text-bright italic">{heading}</h1>
+	<h1 class="page-title mt-4">{heading}</h1>
 	<p class="mt-2 text-mid">{page.error?.message}</p>
 		<a
 			href={home}

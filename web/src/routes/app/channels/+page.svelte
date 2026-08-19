@@ -26,7 +26,7 @@
 	noindex
 />
 
-<h1 class="font-display text-2xl font-normal text-bright italic">Notifications</h1>
+<h1 class="page-title">Notifications</h1>
 <p class="mt-1 text-sm text-dim">
 	Each channel is sent on its own, so a slow one never holds up the rest. Send a test to check
 	one works before you rely on it.
@@ -69,7 +69,7 @@
 {/if}
 
 <form method="POST" action="?/create" use:enhance={submit} class="mt-8 max-w-lg space-y-4">
-	<h2 class="text-sm font-medium text-dim">Add a channel</h2>
+	<h2 class="section-label">Add a channel</h2>
 
 	<div>
 		<label for="name" class="block text-sm font-medium">Name</label>
