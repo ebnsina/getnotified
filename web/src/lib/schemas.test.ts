@@ -23,7 +23,7 @@ test('a well formed monitor passes', () => {
 
 test('an http monitor must have a full URL', () => {
 	const errors = validateMonitorForm(monitorForm({ target: 'example.com' }));
-	assert.match(errors.target, /full address/);
+	assert.match(errors.target, /web address/);
 });
 
 test('a tcp monitor accepts a bare host and port', () => {

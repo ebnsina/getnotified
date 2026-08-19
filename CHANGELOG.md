@@ -31,5 +31,18 @@ All notable changes to GetNotified are recorded here. Format follows
 - Locale-aware formatting throughout via the `Intl` APIs.
 - Friendly error pages for 404, 500 and anything else that goes wrong.
 - Open Graph and canonical metadata on every page.
-- Tests: the flapping rule and probes in Go, the form validators under Node's
-  built-in test runner.
+- Tests: the flapping rule and probes in Go, the form validators and formatters
+  under Node's built-in test runner.
+- Public landing page at `/`, with a live demonstration of the flapping rule.
+  The dashboard now lives under `/app`.
+
+### Changed
+
+- One dark palette across the whole product, with Newsreader for headings,
+  Geist for text, and Geist Mono for anything numeric.
+- Interface copy rewritten in plain words — no implementation terms on screen.
+- Icons render on the server. Hugeicons' own component builds its SVG in
+  `onMount`, so icons were invisible until the page hydrated; a small local
+  component renders the same data directly, and drops a dependency.
+- `Intl.DurationFormat` drops zero units, so a zero-length duration rendered as
+  an empty string and short ones carried stray gaps. Both are fixed.

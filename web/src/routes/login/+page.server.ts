@@ -3,7 +3,7 @@ import { COOKIE, cookieOpts, issueSession, verifyPassword } from '$lib/server/au
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ locals }) => {
-	if (locals.authenticated) redirect(303, '/');
+	if (locals.authenticated) redirect(303, '/app');
 };
 
 export const actions: Actions = {
@@ -15,6 +15,6 @@ export const actions: Actions = {
 
 		cookies.set(COOKIE, issueSession(), cookieOpts);
 		const next = url.searchParams.get('next');
-		redirect(303, next?.startsWith('/') ? next : '/');
+		redirect(303, next?.startsWith('/') ? next : '/app');
 	}
 };

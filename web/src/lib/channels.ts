@@ -14,11 +14,11 @@ export const CHANNEL_FIELDS: Record<string, ChannelField[]> = {
 		}
 	],
 	webhook: [
-		{ name: 'url', label: 'Where should we post?', placeholder: 'https://example.com/alerts' },
+		{ name: 'url', label: 'Where should we send it?', placeholder: 'https://example.com/alerts' },
 		{
 			name: 'secret',
 			label: 'Shared secret (optional)',
-			placeholder: 'Sent as the X-GetNotified-Secret header'
+			placeholder: 'Sent with every message so you can tell it came from us'
 		}
 	],
 	email: [{ name: 'to', label: 'Send to', placeholder: 'you@example.com' }],
@@ -30,8 +30,8 @@ export const CHANNEL_FIELDS: Record<string, ChannelField[]> = {
 export const CHANNEL_TYPES = [
 	{ value: 'slack', label: 'Slack' },
 	{ value: 'email', label: 'Email' },
-	{ value: 'webhook', label: 'Webhook' },
-	{ value: 'sms', label: 'SMS' },
+	{ value: 'webhook', label: 'Your own address' },
+	{ value: 'sms', label: 'Text message' },
 	{ value: 'whatsapp', label: 'WhatsApp' },
 	{ value: 'imessage', label: 'iMessage' }
 ] as const;

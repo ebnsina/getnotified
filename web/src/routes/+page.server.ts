@@ -1,7 +1,7 @@
-import { api } from '$lib/server/api';
-import type { MonitorSummary } from '$lib/types';
+import { config } from '$lib/server/env';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => ({
-	monitors: await api<MonitorSummary[]>('/api/monitors')
+export const load: PageServerLoad = ({ locals }) => ({
+	origin: config.publicOrigin,
+	authenticated: locals.authenticated
 });

@@ -2,8 +2,9 @@ import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 import { COOKIE, validSession } from '$lib/server/auth';
 import { fromAcceptLanguage } from '$lib/locale';
 
-// Public status pages stay reachable without a session — that is the point of them.
-const isPublic = (path: string) => path === '/login' || path.startsWith('/status/');
+// The landing page and status pages are public; the dashboard under /app is not.
+const isPublic = (path: string) =>
+	path === '/' || path === '/login' || path.startsWith('/status/');
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.authenticated = validSession(event.cookies.get(COOKIE));

@@ -24,14 +24,15 @@ type Notifier interface {
 	Send(ctx context.Context, e Event, c store.Channel) error
 }
 
-// required names the config key each channel type cannot work without.
-var required = map[string]string{
-	"slack":    "webhook_url",
-	"webhook":  "url",
-	"email":    "to",
-	"sms":      "to",
-	"whatsapp": "to",
-	"imessage": "to",
+// required names the config key each channel cannot work without, and how to
+// describe it to whoever is filling in the form.
+var required = map[string]struct{ key, label string }{
+	"slack":    {"webhook_url", "Slack address to post to"},
+	"webhook":  {"url", "web address to send to"},
+	"email":    {"to", "email address"},
+	"sms":      {"to", "phone number"},
+	"whatsapp": {"to", "phone number"},
+	"imessage": {"to", "phone number or Apple ID"},
 }
 
 var notifiers = map[string]Notifier{
@@ -53,13 +54,12 @@ func For(kind string) (Notifier, error) {
 
 // ValidateConfig reports a missing destination in words the sender can act on.
 func ValidateConfig(kind string, config map[string]any) error {
-	key, ok := required[kind]
+	want, ok := required[kind]
 	if !ok {
-		return errors.New("That channel type is not supported.")
+		return errors.New("That kind of channel is not supported.")
 	}
-	if s, _ := config[key].(string); strings.TrimSpace(s) == "" {
-		return fmt.Errorf("This channel needs a %s before it can send anything.",
-			strings.ReplaceAll(key, "_", " "))
+	if s, _ := config[want.key].(string); strings.TrimSpace(s) == "" {
+		return fmt.Errorf("Add a %s before this can send anything.", want.label)
 	}
 	return nil
 }

@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import Meta from '$lib/Meta.svelte';
 	import MonitorForm from '$lib/MonitorForm.svelte';
-	import { HugeiconsIcon } from '@hugeicons/svelte';
+	import Icon from '$lib/Icon.svelte';
 	import { PlayIcon, PauseIcon, Delete02Icon } from '@hugeicons/core-free-icons';
 	import { dateTime, dotClass, duration, milliseconds, relative, statusLabel } from '$lib/format';
 	import { validateMonitorForm } from '$lib/schemas';
@@ -29,11 +29,11 @@
 
 <div class="flex items-start justify-between gap-4">
 	<div>
-		<h1 class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+		<h1 class="flex items-center gap-2 font-display text-2xl font-normal text-bright">
 			<span class="size-2.5 rounded-full {dotClass(monitor.status, monitor.paused)}"></span>
 			{monitor.name}
 		</h1>
-		<p class="mt-1 text-sm text-stone-500">
+		<p class="mt-1 text-sm text-dim">
 			{statusLabel(monitor.status, monitor.paused)} ·
 			<span class="font-mono">{monitor.target}</span>
 		</p>
@@ -41,20 +41,20 @@
 	<form method="POST" action="?/pause" use:enhance>
 		<input type="hidden" name="paused" value={String(!monitor.paused)} />
 		<button
-			class="flex items-center gap-1.5 rounded-md border border-stone-300 px-3 py-1.5 text-sm hover:bg-stone-100"
+			class="flex items-center gap-1.5 rounded-md border border-rule px-3 py-1.5 text-sm hover:bg-night-2"
 		>
-			<HugeiconsIcon icon={monitor.paused ? PlayIcon : PauseIcon} size={16} strokeWidth={1.5} />
+			<Icon icon={monitor.paused ? PlayIcon : PauseIcon} size={16} strokeWidth={1.5} />
 			{monitor.paused ? 'Resume checks' : 'Pause checks'}
 		</button>
 	</form>
 </div>
 
 {#if form?.message}
-	<p class="mt-4 rounded-md bg-stone-100 px-3 py-2 text-sm text-stone-700">{form.message}</p>
+	<p class="mt-4 rounded-md bg-night-2 px-3 py-2 text-sm text-mid">{form.message}</p>
 {/if}
 
 <section class="mt-8">
-	<h2 class="text-sm font-medium text-stone-500">Recent checks</h2>
+	<h2 class="text-sm font-medium text-dim">Recent checks</h2>
 	<div class="mt-2 flex flex-wrap gap-1">
 		{#each timeline as check (check.id)}
 			<span
@@ -64,24 +64,24 @@
 					: (check.error ?? 'no response')}"
 			></span>
 		{:else}
-			<p class="text-sm text-stone-500">Nothing checked yet. The first result appears shortly.</p>
+			<p class="text-sm text-dim">Nothing checked yet. The first result appears shortly.</p>
 		{/each}
 	</div>
 </section>
 
 <section class="mt-8">
-	<h2 class="text-sm font-medium text-stone-500">Incidents</h2>
+	<h2 class="text-sm font-medium text-dim">Incidents</h2>
 	{#if data.incidents.length === 0}
-		<p class="mt-2 text-sm text-stone-500">No incidents so far.</p>
+		<p class="mt-2 text-sm text-dim">No incidents so far.</p>
 	{:else}
-		<ul class="mt-2 divide-y divide-stone-100 rounded-lg border border-stone-200 bg-white">
+		<ul class="mt-2 divide-y divide-rule/60 rounded-lg border border-rule bg-night-2">
 			{#each data.incidents as incident (incident.id)}
 				<li class="flex flex-wrap items-baseline justify-between gap-2 px-4 py-3 text-sm">
 					<div>
 						<span class="font-medium">{incident.resolved_at ? 'Resolved' : 'Still open'}</span>
-						<span class="text-stone-500"> · {incident.cause ?? 'no response'}</span>
+						<span class="text-dim"> · {incident.cause ?? 'no response'}</span>
 					</div>
-					<div class="text-stone-500">
+					<div class="text-dim">
 						{relative(data.locale, incident.started_at)} · lasted
 						<span class="numeric">{duration(data.locale, incident.started_at, incident.resolved_at)}</span>
 					</div>
@@ -92,10 +92,10 @@
 </section>
 
 <section class="mt-8 max-w-2xl">
-	<h2 class="text-sm font-medium text-stone-500">Who hears about it</h2>
+	<h2 class="text-sm font-medium text-dim">Who hears about it</h2>
 	{#if data.channels.length === 0}
-		<p class="mt-2 text-sm text-stone-500">
-			No channels set up yet. <a href="/channels" class="underline">Add one</a>.
+		<p class="mt-2 text-sm text-dim">
+			No channels set up yet. <a href="/app/channels" class="underline">Add one</a>.
 		</p>
 	{:else}
 		<form method="POST" action="?/channels" use:enhance class="mt-2 space-y-2">
@@ -107,10 +107,10 @@
 						value={channel.id}
 						checked={data.attached.includes(channel.id)}
 					/>
-					{channel.name} <span class="text-stone-500">({channel.type})</span>
+					{channel.name} <span class="text-dim">({channel.type})</span>
 				</label>
 			{/each}
-			<button class="rounded-md border border-stone-300 px-3 py-1.5 text-sm hover:bg-stone-100">
+			<button class="rounded-md border border-rule px-3 py-1.5 text-sm hover:bg-night-2">
 				Save channels
 			</button>
 		</form>
@@ -118,24 +118,24 @@
 </section>
 
 <section class="mt-8 max-w-2xl">
-	<h2 class="text-sm font-medium text-stone-500">Settings</h2>
+	<h2 class="text-sm font-medium text-dim">Settings</h2>
 	<form method="POST" action="?/update" use:enhance={submit} class="mt-2">
 		<MonitorForm {monitor} {errors} />
 		{#if errors.form}<p class="mt-4 text-sm text-down">{errors.form}</p>{/if}
 
-		<button class="mt-6 rounded-md bg-stone-900 px-4 py-2 text-sm text-white hover:bg-stone-700">
+		<button class="mt-6 rounded-md bg-up px-4 py-2 text-sm font-medium text-night hover:bg-up/90">
 			Save changes
 		</button>
 	</form>
 </section>
 
-<section class="mt-12 max-w-2xl border-t border-stone-200 pt-6">
+<section class="mt-12 max-w-2xl border-t border-rule pt-6">
 	<form method="POST" action="?/delete">
 		<button class="flex items-center gap-1.5 text-sm text-down hover:underline">
-			<HugeiconsIcon icon={Delete02Icon} size={16} strokeWidth={1.5} />
+			<Icon icon={Delete02Icon} size={16} strokeWidth={1.5} />
 			Delete this monitor
 		</button>
-		<p class="mt-1 text-xs text-stone-500">
+		<p class="mt-1 text-xs text-dim">
 			This also removes its check history and past incidents.
 		</p>
 	</form>

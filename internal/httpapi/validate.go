@@ -16,10 +16,10 @@ func validateMonitor(in store.MonitorInput, creating bool) error {
 		return Invalid("name", "Give the monitor a name so you can recognise it later.")
 	}
 	if creating && (in.Target == nil || *in.Target == "") {
-		return Invalid("target", "Tell us what to check — a URL or a host.")
+		return Invalid("target", "Tell us what to check — a web address or a server name.")
 	}
 	if in.Type != nil && !slices.Contains(monitorTypes, *in.Type) {
-		return Invalid("type", "Choose one of HTTP, TCP port, or SSL expiry.")
+		return Invalid("type", "Choose a web address, a port on a server, or a security certificate.")
 	}
 
 	kind := "http"
@@ -29,7 +29,7 @@ func validateMonitor(in store.MonitorInput, creating bool) error {
 	if in.Target != nil && kind == "http" {
 		u, err := url.Parse(*in.Target)
 		if err != nil || (u.Scheme != "http" && u.Scheme != "https") || u.Host == "" {
-			return Invalid("target", "An HTTP monitor needs a full address, like https://example.com.")
+			return Invalid("target", "That does not look like a web address. Try something like https://example.com.")
 		}
 	}
 	if in.IntervalSeconds != nil && *in.IntervalSeconds < 10 {
@@ -42,7 +42,7 @@ func validateMonitor(in store.MonitorInput, creating bool) error {
 		return Invalid("failure_threshold", "It takes at least one failure to open an incident.")
 	}
 	if in.SSLWarnDays != nil && *in.SSLWarnDays < 1 {
-		return Invalid("ssl_warn_days", "Warn at least one day before the certificate expires.")
+		return Invalid("ssl_warn_days", "Warn at least one day before the certificate runs out.")
 	}
 	return nil
 }

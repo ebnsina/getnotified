@@ -50,11 +50,22 @@ export function duration(locale: string, from: string, to: string | null): strin
 		0,
 		Math.round(((to ? Date.parse(to) : Date.now()) - Date.parse(from)) / 1000)
 	);
-	const parts = {
-		hours: Math.floor(total / HOUR),
-		minutes: Math.floor((total % HOUR) / MINUTE),
-		seconds: total % MINUTE
-	};
+	// A duration of nothing still needs to read as a number, and DurationFormat
+	// drops zero units entirely.
+	if (total < MINUTE) {
+		return memo(`s:${locale}`, () =>
+			new Intl.NumberFormat(locale, { style: 'unit', unit: 'second', unitDisplay: 'narrow' })
+		).format(total);
+	}
+
+	// Zero units are dropped too, otherwise they format as stray gaps.
+	const parts = Object.fromEntries(
+		Object.entries({
+			hours: Math.floor(total / HOUR),
+			minutes: Math.floor((total % HOUR) / MINUTE),
+			seconds: total % MINUTE
+		}).filter(([, value]) => value > 0)
+	);
 	return new Intl.DurationFormat(locale, { style: 'narrow' }).format(parts);
 }
 

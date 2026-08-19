@@ -23,16 +23,16 @@
 	noindex
 />
 
-<h1 class="text-xl font-semibold tracking-tight">New monitor</h1>
+<h1 class="font-display text-2xl font-normal text-bright">New monitor</h1>
 
 <form method="POST" use:enhance={submit} class="mt-6 max-w-2xl">
 	<MonitorForm {errors} />
 	{#if errors.form}<p class="mt-4 text-sm text-down">{errors.form}</p>{/if}
 
 	<div class="mt-6 flex gap-3">
-		<button class="rounded-md bg-stone-900 px-4 py-2 text-sm text-white hover:bg-stone-700">
+		<button class="rounded-md bg-up px-4 py-2 text-sm font-medium text-night hover:bg-up/90">
 			Create monitor
 		</button>
-		<a href="/" class="rounded-md px-4 py-2 text-sm text-stone-500 hover:text-stone-900">Cancel</a>
+		<a href="/app" class="rounded-md px-4 py-2 text-sm text-dim hover:text-bright">Cancel</a>
 	</div>
 </form>

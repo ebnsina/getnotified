@@ -63,6 +63,6 @@ export const actions: Actions = {
 		} catch (err) {
 			return toFormError(err);
 		}
-		redirect(303, '/');
+		redirect(303, '/app');
 	}
 };

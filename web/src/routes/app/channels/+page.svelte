@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Meta from '$lib/Meta.svelte';
-	import { HugeiconsIcon } from '@hugeicons/svelte';
+	import Icon from '$lib/Icon.svelte';
 	import { Delete02Icon } from '@hugeicons/core-free-icons';
 	import { CHANNEL_FIELDS, CHANNEL_TYPES } from '$lib/channels';
 	import { validateChannelForm } from '$lib/schemas';
@@ -12,7 +12,7 @@
 
 	const errors = $derived({ ...clientErrors, ...(form?.errors ?? {}) });
 	const field =
-		'mt-1 w-full rounded-md border border-stone-300 px-3 py-2 focus:border-stone-500 focus:outline-none';
+		'mt-1 w-full rounded-md border border-rule bg-night px-3 py-2 text-bright placeholder:text-dim focus:border-dim focus:outline-none';
 
 	const submit = ({ formData, cancel }: { formData: FormData; cancel: () => void }) => {
 		clientErrors = validateChannelForm(formData);
@@ -27,23 +27,23 @@
 	noindex
 />
 
-<h1 class="text-xl font-semibold tracking-tight">Notifications</h1>
-<p class="mt-1 text-sm text-stone-500">
+<h1 class="font-display text-2xl font-normal text-bright">Notifications</h1>
+<p class="mt-1 text-sm text-dim">
 	Each channel is sent on its own, so a slow one never holds up the rest.
 </p>
 
 {#if form?.message}
-	<p class="mt-4 rounded-md bg-stone-100 px-3 py-2 text-sm text-stone-700">{form.message}</p>
+	<p class="mt-4 rounded-md bg-night-2 px-3 py-2 text-sm text-mid">{form.message}</p>
 {/if}
 
 {#if data.channels.length > 0}
-	<ul class="mt-6 divide-y divide-stone-100 rounded-lg border border-stone-200 bg-white">
+	<ul class="mt-6 divide-y divide-rule/60 rounded-lg border border-rule bg-night-2">
 		{#each data.channels as channel (channel.id)}
 			<li class="flex items-center justify-between gap-4 px-4 py-3 text-sm">
 				<div class="min-w-0">
 					<span class="font-medium">{channel.name}</span>
-					<span class="text-stone-500"> · {channel.type}</span>
-					<div class="truncate font-mono text-xs text-stone-500">
+					<span class="text-dim"> · {channel.type}</span>
+					<div class="truncate font-mono text-xs text-dim">
 						{Object.values(channel.config)[0] ?? ''}
 					</div>
 				</div>
@@ -51,9 +51,9 @@
 					<input type="hidden" name="id" value={channel.id} />
 					<button
 						aria-label="Remove {channel.name}"
-						class="flex items-center gap-1.5 text-stone-500 hover:text-down"
+						class="flex items-center gap-1.5 text-dim hover:text-down"
 					>
-						<HugeiconsIcon icon={Delete02Icon} size={16} strokeWidth={1.5} />
+						<Icon icon={Delete02Icon} size={16} strokeWidth={1.5} />
 						Remove
 					</button>
 				</form>
@@ -63,7 +63,7 @@
 {/if}
 
 <form method="POST" action="?/create" use:enhance={submit} class="mt-8 max-w-lg space-y-4">
-	<h2 class="text-sm font-medium text-stone-500">Add a channel</h2>
+	<h2 class="text-sm font-medium text-dim">Add a channel</h2>
 
 	<div>
 		<label for="name" class="block text-sm font-medium">Name</label>
@@ -100,10 +100,10 @@
 		<p class="text-sm text-down">{errors.form ?? errors.config}</p>
 	{/if}
 
-	<button class="rounded-md bg-stone-900 px-4 py-2 text-sm text-white hover:bg-stone-700">
+	<button class="rounded-md bg-up px-4 py-2 text-sm font-medium text-night hover:bg-up/90">
 		Add channel
 	</button>
-	<p class="text-xs text-stone-500">
-		Credentials for email, Twilio and the iMessage relay live in server settings, not here.
+	<p class="text-xs text-dim">
+		Sign-in details for email and text messages live in your server settings, not here.
 	</p>
 </form>

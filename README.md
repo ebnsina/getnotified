@@ -42,7 +42,7 @@ node web/scripts/hash-password.js 'your password'   # -> AUTH_PASSWORD_HASH
 cd web && npm install && npm run dev
 ```
 
-Dashboard on `:5173`, public status page at `/status/default`.
+Landing page on `:5173`, dashboard at `/app`, public status page at `/status/default`.
 
 ## How it works
 
@@ -75,7 +75,7 @@ internal/probe/       http / tcp / ssl_expiry probes
 internal/jobs/        River workers and the up/down state machine
 internal/notify/      one file per notification channel
 internal/httpapi/     routes, validation, and the error envelope
-web/                  SvelteKit dashboard and SSR status page
+web/                  SvelteKit landing page, dashboard and status page
 ```
 
 ## Not built yet

@@ -11,7 +11,7 @@
 	let type = $state(initialType);
 
 	const field =
-		'mt-1 w-full rounded-md border border-stone-300 px-3 py-2 focus:border-stone-500 focus:outline-none';
+		'mt-1 w-full rounded-md border border-rule bg-night px-3 py-2 text-bright placeholder:text-dim focus:border-dim focus:outline-none';
 </script>
 
 {#snippet error(name: string)}
@@ -38,13 +38,13 @@
 		<div>
 			<label for="type" class="block text-sm font-medium">Check type</label>
 			<select id="type" name="type" bind:value={type} class={field}>
-				<option value="http">HTTP</option>
-				<option value="tcp">TCP port</option>
-				<option value="ssl_expiry">SSL expiry</option>
+				<option value="http">A web address</option>
+				<option value="tcp">A port on a server</option>
+				<option value="ssl_expiry">A security certificate</option>
 			</select>
 		</div>
 		<div>
-			<label for="target" class="block text-sm font-medium">Target</label>
+			<label for="target" class="block text-sm font-medium">What to check</label>
 			<input
 				id="target"
 				name="target"
@@ -94,7 +94,7 @@
 				value={monitor?.failure_threshold ?? 2}
 				class="{field} numeric"
 			/>
-			<p class="mt-1 text-xs text-stone-500">
+			<p class="mt-1 text-xs text-dim">
 				How many checks in a row must fail before anyone hears about it.
 			</p>
 			{@render error('failure_threshold')}
@@ -103,7 +103,7 @@
 
 	{#if type === 'http'}
 		<div>
-			<label for="expected_status" class="block text-sm font-medium">Treat these codes as healthy</label>
+			<label for="expected_status" class="block text-sm font-medium">Replies that count as healthy</label>
 			<input
 				id="expected_status"
 				name="expected_status"
@@ -127,7 +127,7 @@
 	{/if}
 
 	<div>
-		<label for="tags" class="block text-sm font-medium">Tags</label>
+		<label for="tags" class="block text-sm font-medium">Labels</label>
 		<input id="tags" name="tags" value={(monitor?.tags ?? []).join(', ')} class={field} />
 	</div>
 </div>

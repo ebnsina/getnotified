@@ -8,8 +8,11 @@ export const MonitorSchema = v.object({
 		v.trim(),
 		v.minLength(1, 'Give the monitor a name so you can recognise it later.')
 	),
-	type: v.picklist(['http', 'tcp', 'ssl_expiry'], 'Choose one of HTTP, TCP port, or SSL expiry.'),
-	target: v.pipe(v.string(), v.trim(), v.minLength(1, 'Tell us what to check — a URL or a host.')),
+	type: v.picklist(
+		['http', 'tcp', 'ssl_expiry'],
+		'Choose a web address, a port on a server, or a security certificate.'
+	),
+	target: v.pipe(v.string(), v.trim(), v.minLength(1, 'Tell us what to check — a web address or a server name.')),
 	interval_seconds: v.pipe(
 		v.number('Enter how often to check, in seconds.'),
 		v.minValue(10, 'Check no more often than once every 10 seconds.')
@@ -26,14 +29,14 @@ export const MonitorSchema = v.object({
 	ssl_warn_days: v.optional(
 		v.pipe(
 			v.number('Enter a number of days.'),
-			v.minValue(1, 'Warn at least one day before the certificate expires.')
+			v.minValue(1, 'Warn at least one day before the certificate runs out.')
 		)
 	)
 });
 
 export const HttpTargetSchema = v.pipe(
 	v.string(),
-	v.url('An HTTP monitor needs a full address, like https://example.com.')
+	v.url('That does not look like a web address. Try something like https://example.com.')
 );
 
 export const ChannelSchema = v.object({
