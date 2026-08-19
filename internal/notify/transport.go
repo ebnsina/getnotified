@@ -5,9 +5,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"strings"
 	"time"
 )
+
+// bodyPeek is how much of a rejection we quote back. Enough to explain, not
+// enough to paste a web page into a notification.
+const bodyPeek = 400
 
 var client = &http.Client{Timeout: 15 * time.Second}
 
@@ -32,7 +38,11 @@ func postJSON(ctx context.Context, url string, body any, hdr map[string]string) 
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode/100 != 2 {
-		return fmt.Errorf("%s returned %d", url, resp.StatusCode)
+		peek, _ := io.ReadAll(io.LimitReader(resp.Body, bodyPeek))
+		if said := strings.TrimSpace(string(peek)); said != "" {
+			return fmt.Errorf("it answered %d — %s", resp.StatusCode, said)
+		}
+		return fmt.Errorf("it answered %d", resp.StatusCode)
 	}
 	return nil
 }

@@ -29,13 +29,11 @@ func Explain(err error) string {
 		return "it took too long to answer."
 	}
 
-	// Errors we wrote ourselves already read as plain sentences.
-	if msg := err.Error(); !strings.Contains(msg, "dial ") && !strings.Contains(msg, "http://") &&
-		!strings.Contains(msg, "https://") {
-		return msg
+	// Anything else was written to be read: the far end's own explanation, or
+	// one of ours. Only socket wording is unfit to show.
+	msg := err.Error()
+	if strings.Contains(msg, "dial ") || strings.Contains(msg, "connect: ") {
+		return "it could not be delivered."
 	}
-	if _, after, found := strings.Cut(err.Error(), " returned "); found {
-		return "the address answered with " + after + "."
-	}
-	return "it could not be delivered."
+	return msg
 }

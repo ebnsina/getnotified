@@ -42,6 +42,10 @@ All notable changes to GetNotified are recorded here. Format follows
 - The macOS iMessage relay (`cmd/imessage-relay`), the one channel Apple gives
   no API for. Recipient and message reach AppleScript as arguments, so a
   message cannot execute anything.
+- A failed delivery now carries the far end's own explanation instead of just a
+  status code, which is the whole point of being able to test a channel. The
+  iMessage relay recognises the two macOS refusals that matter and says what to
+  do about each.
 - Delivery failures are explained in plain words — nothing answered, it timed
   out, the address refused it — instead of socket wording.
 

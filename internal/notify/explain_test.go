@@ -21,8 +21,10 @@ func TestExplain(t *testing.T) {
 		{"unknown host", &net.DNSError{Err: "no such host", Name: "nope.example"},
 			"that address could not be found."},
 		{"gave up waiting", context.DeadlineExceeded, "it took too long to answer."},
-		{"rejected by the far end", fmt.Errorf("https://hooks.slack.com/services/x returned 404"),
-			"the address answered with 404."},
+		{"rejected by the far end", fmt.Errorf("it answered 404"), "it answered 404"},
+		{"the far end explains itself",
+			fmt.Errorf("it answered 502 — macOS has not allowed this program to control Messages."),
+			"it answered 502 — macOS has not allowed this program to control Messages."},
 		{"our own wording survives", errors.New("Add an email address before this can send anything."),
 			"Add an email address before this can send anything."},
 	}

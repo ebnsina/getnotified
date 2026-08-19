@@ -120,8 +120,18 @@ func send(ctx context.Context, to, text string) error {
 	cmd.Stdin = strings.NewReader(script)
 
 	out, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("Messages refused it: %s", strings.TrimSpace(string(out)))
+	if err == nil {
+		return nil
 	}
-	return nil
+
+	said := strings.TrimSpace(string(out))
+	if strings.Contains(said, "-1743") || strings.Contains(said, "Not authorized") {
+		return errors.New("macOS has not allowed this program to control Messages. " +
+			"Open System Settings, then Privacy & Security, then Automation, and turn on " +
+			"Messages for the terminal running the relay.")
+	}
+	if strings.Contains(said, "-1728") || strings.Contains(said, "Invalid handle") {
+		return errors.New("Messages does not recognise that recipient as an iMessage address.")
+	}
+	return fmt.Errorf("Messages refused it: %s", said)
 }
