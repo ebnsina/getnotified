@@ -10,8 +10,7 @@
 	const initialType = monitor?.type ?? 'http';
 	let type = $state(initialType);
 
-	const field =
-		'mt-1 w-full rounded-md border border-rule bg-night px-3 py-2 text-bright placeholder:text-dim focus:border-dim focus:outline-none';
+	const field = 'field mt-1';
 </script>
 
 {#snippet error(name: string)}
@@ -37,7 +36,7 @@
 	<div class="grid gap-4 sm:grid-cols-2">
 		<div>
 			<label for="type" class="block text-sm font-medium">Check type</label>
-			<select id="type" name="type" bind:value={type} class={field}>
+			<select id="type" name="type" bind:value={type} class="field field-select mt-1">
 				<option value="http">A web address</option>
 				<option value="tcp">A port on a server</option>
 				<option value="ssl_expiry">A security certificate</option>

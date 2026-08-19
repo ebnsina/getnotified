@@ -15,10 +15,10 @@
 />
 
 <div class="flex items-center justify-between">
-	<h1 class="font-display text-2xl font-normal text-bright">Monitors</h1>
+	<h1 class="font-display text-2xl font-normal text-bright italic">Monitors</h1>
 	<a
 		href="/app/monitors/new"
-		class="flex items-center gap-1.5 rounded-md bg-up px-3 py-1.5 text-sm font-medium text-night hover:bg-up/90"
+		class="btn btn-primary btn-sm"
 	>
 		<Icon icon={PlusSignIcon} size={16} strokeWidth={2} />
 		New monitor

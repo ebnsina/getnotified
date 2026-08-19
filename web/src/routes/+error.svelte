@@ -21,11 +21,11 @@
 		strokeWidth={1.5}
 		class="mx-auto text-dim"
 	/>
-	<h1 class="mt-4 text-xl font-semibold tracking-tight">{heading}</h1>
+	<h1 class="mt-4 font-display text-2xl font-normal text-bright italic">{heading}</h1>
 	<p class="mt-2 text-mid">{page.error?.message}</p>
 		<a
 			href={home}
-			class="mt-6 inline-block rounded-md bg-up px-4 py-2 text-sm font-medium text-night hover:bg-up/90"
+			class="btn btn-primary mt-6"
 		>
 			{home === '/app' ? 'Back to monitors' : 'Back to the home page'}
 		</a>

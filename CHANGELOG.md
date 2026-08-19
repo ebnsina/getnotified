@@ -38,6 +38,9 @@ All notable changes to GetNotified are recorded here. Format follows
 
 ### Changed
 
+- Every serif heading is italic, matching the front page.
+- Form controls are custom drawn and defined once: fields, selects, checkboxes
+  and buttons share one radius, one focus treatment, and one set of states.
 - One dark palette across the whole product, with Newsreader for headings,
   Geist for text, and Geist Mono for anything numeric.
 - Interface copy rewritten in plain words — no implementation terms on screen.

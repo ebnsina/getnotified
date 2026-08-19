@@ -22,7 +22,7 @@
 <div class="min-h-screen bg-night text-bright">
 <div class="mx-auto max-w-3xl px-6 py-12">
 
-<h1 class="font-display text-2xl font-normal text-bright">{status.org.name} status</h1>
+<h1 class="font-display text-2xl font-normal text-bright italic">{status.org.name} status</h1>
 <p class="mt-1 text-sm text-dim">
 	{summary} Last checked {relative(data.locale, status.as_of)}.
 </p>

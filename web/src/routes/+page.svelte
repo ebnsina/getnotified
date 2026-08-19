@@ -84,14 +84,14 @@
 			<div class="mt-10 flex flex-wrap items-center justify-center gap-3">
 				<a
 					href={entrance}
-					class="flex items-center gap-2 rounded bg-up px-4 py-2 text-sm font-medium text-night hover:bg-up/90"
+					class="btn btn-primary"
 				>
 					Open the dashboard
 					<kbd class="rounded bg-night/20 px-1.5 py-0.5 font-mono text-[11px]">D</kbd>
 				</a>
 				<a
 					href="/status/default"
-					class="flex items-center gap-2 rounded border border-rule px-4 py-2 text-sm text-bright hover:border-dim"
+					class="btn btn-secondary"
 				>
 					See a status page
 					<kbd class="rounded border border-rule px-1.5 py-0.5 font-mono text-[11px] text-dim">S</kbd>
@@ -112,7 +112,7 @@
 						? 'border-t sm:border-t-0'
 						: ''}"
 				>
-					<h2 class="font-display text-xl text-bright">{principle.title}</h2>
+					<h2 class="font-display text-xl text-bright italic">{principle.title}</h2>
 					<p class="mt-3 text-sm leading-relaxed text-dim">{principle.body}</p>
 				</article>
 			{/each}
@@ -152,7 +152,7 @@
 			</div>
 			<a
 				href="/status/default"
-				class="flex items-center gap-2 rounded border border-rule px-4 py-2 text-sm text-bright hover:border-dim"
+				class="btn btn-secondary"
 			>
 				Look at a live one
 				<Icon icon={ArrowRight01Icon} size={16} strokeWidth={1.5} />

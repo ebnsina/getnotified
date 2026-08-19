@@ -29,7 +29,7 @@
 
 <div class="flex items-start justify-between gap-4">
 	<div>
-		<h1 class="flex items-center gap-2 font-display text-2xl font-normal text-bright">
+		<h1 class="flex items-center gap-2 font-display text-2xl font-normal text-bright italic">
 			<span class="size-2.5 rounded-full {dotClass(monitor.status, monitor.paused)}"></span>
 			{monitor.name}
 		</h1>
@@ -41,7 +41,7 @@
 	<form method="POST" action="?/pause" use:enhance>
 		<input type="hidden" name="paused" value={String(!monitor.paused)} />
 		<button
-			class="flex items-center gap-1.5 rounded-md border border-rule px-3 py-1.5 text-sm hover:bg-night-2"
+			class="btn btn-secondary btn-sm"
 		>
 			<Icon icon={monitor.paused ? PlayIcon : PauseIcon} size={16} strokeWidth={1.5} />
 			{monitor.paused ? 'Resume checks' : 'Pause checks'}
@@ -102,6 +102,7 @@
 			{#each data.channels as channel (channel.id)}
 				<label class="flex items-center gap-2 text-sm">
 					<input
+						class="check"
 						type="checkbox"
 						name="channel_ids"
 						value={channel.id}
@@ -110,7 +111,7 @@
 					{channel.name} <span class="text-dim">({channel.type})</span>
 				</label>
 			{/each}
-			<button class="rounded-md border border-rule px-3 py-1.5 text-sm hover:bg-night-2">
+			<button class="btn btn-secondary btn-sm">
 				Save channels
 			</button>
 		</form>
@@ -123,7 +124,7 @@
 		<MonitorForm {monitor} {errors} />
 		{#if errors.form}<p class="mt-4 text-sm text-down">{errors.form}</p>{/if}
 
-		<button class="mt-6 rounded-md bg-up px-4 py-2 text-sm font-medium text-night hover:bg-up/90">
+		<button class="btn btn-primary mt-6">
 			Save changes
 		</button>
 	</form>
@@ -131,7 +132,7 @@
 
 <section class="mt-12 max-w-2xl border-t border-rule pt-6">
 	<form method="POST" action="?/delete">
-		<button class="flex items-center gap-1.5 text-sm text-down hover:underline">
+		<button class="btn btn-danger btn-sm">
 			<Icon icon={Delete02Icon} size={16} strokeWidth={1.5} />
 			Delete this monitor
 		</button>

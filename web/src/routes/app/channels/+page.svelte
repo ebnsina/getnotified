@@ -11,8 +11,7 @@
 	let clientErrors = $state<Record<string, string>>({});
 
 	const errors = $derived({ ...clientErrors, ...(form?.errors ?? {}) });
-	const field =
-		'mt-1 w-full rounded-md border border-rule bg-night px-3 py-2 text-bright placeholder:text-dim focus:border-dim focus:outline-none';
+	const field = 'field mt-1';
 
 	const submit = ({ formData, cancel }: { formData: FormData; cancel: () => void }) => {
 		clientErrors = validateChannelForm(formData);
@@ -27,7 +26,7 @@
 	noindex
 />
 
-<h1 class="font-display text-2xl font-normal text-bright">Notifications</h1>
+<h1 class="font-display text-2xl font-normal text-bright italic">Notifications</h1>
 <p class="mt-1 text-sm text-dim">
 	Each channel is sent on its own, so a slow one never holds up the rest.
 </p>
@@ -51,7 +50,7 @@
 					<input type="hidden" name="id" value={channel.id} />
 					<button
 						aria-label="Remove {channel.name}"
-						class="flex items-center gap-1.5 text-dim hover:text-down"
+						class="btn btn-quiet btn-sm"
 					>
 						<Icon icon={Delete02Icon} size={16} strokeWidth={1.5} />
 						Remove
@@ -73,7 +72,7 @@
 
 	<div>
 		<label for="type" class="block text-sm font-medium">Type</label>
-		<select id="type" name="type" bind:value={type} class={field}>
+		<select id="type" name="type" bind:value={type} class="field field-select mt-1">
 			{#each CHANNEL_TYPES as option (option.value)}
 				<option value={option.value}>{option.label}</option>
 			{/each}
@@ -100,7 +99,7 @@
 		<p class="text-sm text-down">{errors.form ?? errors.config}</p>
 	{/if}
 
-	<button class="rounded-md bg-up px-4 py-2 text-sm font-medium text-night hover:bg-up/90">
+	<button class="btn btn-primary">
 		Add channel
 	</button>
 	<p class="text-xs text-dim">
