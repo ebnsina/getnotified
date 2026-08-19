@@ -53,7 +53,7 @@
 		<header class="flex flex-wrap items-center justify-between gap-3 border-b border-rule px-6 py-4">
 			<a href="/" class="flex items-baseline gap-2">
 				<span class="size-2 translate-y-[-1px] rounded-full bg-up"></span>
-				<span class="font-semibold tracking-tight text-bright">GetNotified</span>
+				<span class="font-display text-lg text-bright italic">GetNotified</span>
 			</a>
 
 			<nav class="flex flex-wrap items-center gap-4 font-mono text-xs sm:gap-6">

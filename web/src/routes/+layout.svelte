@@ -20,7 +20,7 @@
 	<div class="min-h-screen bg-night text-bright">
 		<header class="border-b border-rule bg-night-2">
 			<div class="mx-auto flex max-w-5xl items-center gap-6 px-6 py-4">
-				<a href="/app" class="font-semibold tracking-tight">GetNotified</a>
+				<a href="/app" class="font-display text-lg text-bright italic">GetNotified</a>
 				<nav class="flex gap-4 text-sm">
 					{#each nav as item (item.href)}
 						<a

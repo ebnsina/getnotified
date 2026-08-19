@@ -21,7 +21,9 @@
 	--color-dim: oklch(0.6 0.014 265);
 	--color-mid: oklch(0.76 0.015 263);
 	--color-bright: oklch(0.95 0.004 263);
+	/* Focus: a light border with the primary colour ringed around it. */
 	--color-focus: oklch(0.929 0.013 255.508);
+	--color-focus-ring: var(--color-up);
 }
 
 /* Numbers read as data, so they get the mono face wherever they appear. */
@@ -37,7 +39,7 @@ html {
 }
 
 :focus-visible {
-	outline: 2px solid var(--color-focus);
+	outline: 2px solid var(--color-focus-ring);
 	outline-offset: 2px;
 }
 
@@ -64,7 +66,7 @@ html {
 	.field:focus,
 	.field:focus-visible {
 		border-color: var(--color-focus);
-		outline: 2px solid var(--color-focus);
+		outline: 2px solid var(--color-focus-ring);
 		outline-offset: 2px;
 	}
 
@@ -109,7 +111,7 @@ html {
 	}
 
 	.check:focus-visible {
-		outline: 2px solid var(--color-focus);
+		outline: 2px solid var(--color-focus-ring);
 		outline-offset: 2px;
 	}
 
