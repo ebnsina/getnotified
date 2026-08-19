@@ -78,12 +78,25 @@ internal/httpapi/     routes, validation, and the error envelope
 web/                  SvelteKit landing page, dashboard and status page
 ```
 
+## The iMessage relay
+
+Apple has no public iMessage API, so this one channel needs a Mac. Run
+`cmd/imessage-relay` there and point the main server at it:
+
+```sh
+RELAY_ADDR=127.0.0.1:8123 IMESSAGE_RELAY_KEY=… go run ./cmd/imessage-relay
+```
+
+It exposes `POST /send` behind a bearer key and drives the Messages app. The
+recipient and message are passed to AppleScript as arguments, never
+interpolated into it, so nothing in a message can be executed. Give the Mac
+Automation permission for Messages the first time it runs.
+
+Every other channel works without it.
+
 ## Not built yet
 
 - **Kamal deploy config** — Dockerfiles for both services plus `deploy.yml`.
-- **iMessage relay** — the notifier is done; the macOS service it posts to
-  (`POST /send`, osascript underneath) is not. Every other channel works
-  without it.
 - **Multi-region checks** — `checks.region` exists and is written as `local`;
   the multi-VPS orchestration does not.
 - **Billing, teams, RBAC** — deliberately out of scope for v1.

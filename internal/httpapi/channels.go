@@ -1,13 +1,19 @@
 package httpapi
 
 import (
+	"context"
+	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 
 	"github.com/fajrlabs/getnotified/internal/notify"
 	"github.com/fajrlabs/getnotified/internal/store"
 )
+
+// A test must answer while someone is waiting on it.
+const testTimeout = 15 * time.Second
 
 func (a *API) listChannels(w http.ResponseWriter, r *http.Request) error {
 	out, err := store.ListChannels(r.Context(), a.Pool, a.OrgID)
@@ -49,6 +55,32 @@ func (a *API) deleteChannel(w http.ResponseWriter, r *http.Request) error {
 	}
 	w.WriteHeader(http.StatusNoContent)
 	return nil
+}
+
+// testChannel delivers a test message straight away, rather than through the
+// queue, so whoever pressed the button learns the result now.
+func (a *API) testChannel(w http.ResponseWriter, r *http.Request) error {
+	ch, err := store.GetChannel(r.Context(), a.Pool, chi.URLParam(r, "id"))
+	if err != nil {
+		return notFound(err, ErrChannelNotFound)
+	}
+
+	sender, err := notify.For(ch.Type)
+	if err != nil {
+		return Invalid("type", "That kind of channel is not supported.")
+	}
+	if err := notify.ValidateConfig(ch.Type, ch.Config); err != nil {
+		return Invalid("config", err.Error())
+	}
+
+	ctx, cancel := context.WithTimeout(r.Context(), testTimeout)
+	defer cancel()
+
+	if err := sender.Send(ctx, notify.TestEvent(time.Now()), ch); err != nil {
+		slog.Info("channel test failed", "channel", ch.ID, "type", ch.Type, "err", err)
+		return TestFailed(notify.Explain(err))
+	}
+	return respond(w, http.StatusOK, map[string]bool{"delivered": true})
 }
 
 func (a *API) getMonitorChannels(w http.ResponseWriter, r *http.Request) error {

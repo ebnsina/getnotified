@@ -44,6 +44,13 @@ var (
 		"Something went wrong on our side. The team has been notified."}
 )
 
+// TestFailed reports why a channel could not deliver. The reason is included
+// because it is the only way the sender can fix their own settings.
+func TestFailed(reason string) *Error {
+	return &Error{http.StatusBadGateway, "channel_test_failed",
+		fmt.Sprintf("The test did not get through: %s", reason)}
+}
+
 // Invalid builds a validation failure. The message is shown to the person who
 // submitted the form, so it names the field in plain words.
 func Invalid(field, message string) *Error {

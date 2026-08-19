@@ -21,6 +21,16 @@ export const actions: Actions = {
 		return { message: 'Channel added.' };
 	},
 
+	test: async ({ request }) => {
+		const id = String((await request.formData()).get('id') ?? '');
+		try {
+			await api(`/api/channels/${id}/test`, { method: 'POST' });
+		} catch (err) {
+			return toFormError(err);
+		}
+		return { message: 'Test sent. Check that it arrived.' };
+	},
+
 	delete: async ({ request }) => {
 		const id = String((await request.formData()).get('id') ?? '');
 		try {

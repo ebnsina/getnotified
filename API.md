@@ -147,6 +147,16 @@ Returns `201` and the channel.
 
 Returns `204`.
 
+### `POST /api/channels/{id}/test`
+
+Sends a test message through the channel immediately, rather than through the
+queue, and waits for the result. Returns `200` with `{"delivered": true}`, or
+`channel_test_failed` with the reason in plain words — the address refused it,
+nothing answered, it timed out.
+
+The message says it is a test, so nobody mistakes it for a real outage. A
+`webhook` channel receives the usual payload with `"kind": "test"`.
+
 ## Public status
 
 ### `GET /status/{slug}`
@@ -181,6 +191,6 @@ A `webhook` channel receives this on every transition:
 }
 ```
 
-`kind` is `down` or `up`. If the channel has a `secret`, it arrives as the
+`kind` is `down`, `up`, or `test`. If the channel has a `secret`, it arrives as the
 `X-GetNotified-Secret` header. Any non-2xx response is retried with exponential
 backoff up to `max_attempts`.

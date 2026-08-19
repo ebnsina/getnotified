@@ -15,9 +15,19 @@ import (
 // Event is what a channel announces. Recoveries need the same context as
 // outages, so this carries the event rather than a bare incident.
 type Event struct {
-	Kind     string         `json:"kind"` // "down" | "up"
+	Kind     string         `json:"kind"` // "down" | "up" | "test"
 	Monitor  store.Monitor  `json:"monitor"`
 	Incident store.Incident `json:"incident"`
+}
+
+// TestEvent is what a channel sends when someone checks it works. It says so
+// plainly, so nobody mistakes it for a real outage.
+func TestEvent(now time.Time) Event {
+	return Event{
+		Kind:     "test",
+		Monitor:  store.Monitor{Name: "Test message", Target: "no monitor — this is a check"},
+		Incident: store.Incident{StartedAt: now},
+	}
 }
 
 type Notifier interface {
@@ -66,13 +76,23 @@ func ValidateConfig(kind string, config map[string]any) error {
 
 // Subject and Body are deliberately plain. No countdowns, no urgency theatre.
 func (e Event) Subject() string {
-	if e.Kind == "up" {
+	switch e.Kind {
+	case "test":
+		return "Test message from GetNotified"
+	case "up":
 		return fmt.Sprintf("%s is back up", e.Monitor.Name)
+	default:
+		return fmt.Sprintf("%s is down", e.Monitor.Name)
 	}
-	return fmt.Sprintf("%s is down", e.Monitor.Name)
 }
 
 func (e Event) Body() string {
+	if e.Kind == "test" {
+		return "This is a test from GetNotified.\n\n" +
+			"If you are reading it, this channel is set up correctly and real " +
+			"notices will arrive here.\n"
+	}
+
 	var b strings.Builder
 	fmt.Fprintf(&b, "%s\n\nTarget: %s\n", e.Subject(), e.Monitor.Target)
 	if e.Incident.Cause != nil && *e.Incident.Cause != "" {

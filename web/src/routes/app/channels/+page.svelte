@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import Meta from '$lib/Meta.svelte';
 	import Icon from '$lib/Icon.svelte';
-	import { Delete02Icon } from '@hugeicons/core-free-icons';
+	import { Delete02Icon, SentIcon } from '@hugeicons/core-free-icons';
 	import { CHANNEL_FIELDS, CHANNEL_TYPES } from '$lib/channels';
 	import { validateChannelForm } from '$lib/schemas';
 
@@ -28,7 +28,8 @@
 
 <h1 class="font-display text-2xl font-normal text-bright italic">Notifications</h1>
 <p class="mt-1 text-sm text-dim">
-	Each channel is sent on its own, so a slow one never holds up the rest.
+	Each channel is sent on its own, so a slow one never holds up the rest. Send a test to check
+	one works before you rely on it.
 </p>
 
 {#if form?.message}
@@ -46,16 +47,22 @@
 						{Object.values(channel.config)[0] ?? ''}
 					</div>
 				</div>
-				<form method="POST" action="?/delete" use:enhance>
-					<input type="hidden" name="id" value={channel.id} />
-					<button
-						aria-label="Remove {channel.name}"
-						class="btn btn-quiet btn-sm"
-					>
-						<Icon icon={Delete02Icon} size={16} strokeWidth={1.5} />
-						Remove
-					</button>
-				</form>
+				<div class="flex flex-none items-center gap-1">
+					<form method="POST" action="?/test" use:enhance>
+						<input type="hidden" name="id" value={channel.id} />
+						<button aria-label="Send a test to {channel.name}" class="btn btn-secondary btn-sm">
+							<Icon icon={SentIcon} size={16} strokeWidth={1.5} />
+							Send a test
+						</button>
+					</form>
+					<form method="POST" action="?/delete" use:enhance>
+						<input type="hidden" name="id" value={channel.id} />
+						<button aria-label="Remove {channel.name}" class="btn btn-quiet btn-sm">
+							<Icon icon={Delete02Icon} size={16} strokeWidth={1.5} />
+							Remove
+						</button>
+					</form>
+				</div>
 			</li>
 		{/each}
 	</ul>

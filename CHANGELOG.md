@@ -36,6 +36,15 @@ All notable changes to GetNotified are recorded here. Format follows
 - Public landing page at `/`, with a live demonstration of the flapping rule.
   The dashboard now lives under `/app`.
 
+- Send a test message through any channel from its row in the dashboard, or
+  `POST /api/channels/{id}/test`. It reports back what happened rather than
+  queueing, so a channel can be checked before anyone relies on it.
+- The macOS iMessage relay (`cmd/imessage-relay`), the one channel Apple gives
+  no API for. Recipient and message reach AppleScript as arguments, so a
+  message cannot execute anything.
+- Delivery failures are explained in plain words — nothing answered, it timed
+  out, the address refused it — instead of socket wording.
+
 ### Changed
 
 - Every serif heading is italic, and the wordmark is set in the serif too.

@@ -53,6 +53,7 @@ func (a *API) Routes() http.Handler {
 		r.Get("/channels", a.h(a.listChannels))
 		r.Post("/channels", a.h(a.createChannel))
 		r.Delete("/channels/{id}", a.h(a.deleteChannel))
+		r.Post("/channels/{id}/test", a.h(a.testChannel))
 	})
 	return r
 }
