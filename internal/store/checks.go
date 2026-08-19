@@ -25,6 +25,18 @@ func RecordCheck(ctx context.Context, db Queryer, monitorID string, ok bool, lat
 	return err
 }
 
+// PruneChecks deletes check results past their retention window and reports how
+// many went. It works in bounded batches so a backlog cannot hold a long lock.
+// ponytail: batched delete, move to a partitioned table if this ever falls behind.
+func PruneChecks(ctx context.Context, db Queryer, retention time.Duration, batch int) (int64, error) {
+	tag, err := db.Exec(ctx, `
+		delete from checks
+		 where ctid in (
+		   select ctid from checks where checked_at < now() - $1::interval limit $2
+		 )`, retention, batch)
+	return tag.RowsAffected(), err
+}
+
 func ListChecks(ctx context.Context, db Queryer, monitorID string, limit int) ([]Check, error) {
 	rows, err := db.Query(ctx, `
 		select id, monitor_id, checked_at, ok, latency_ms, status_code, error, region

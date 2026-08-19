@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -36,7 +37,12 @@ type config struct {
 	apiKey           string
 	orgSlug          string
 	orgName          string
+	checkRetention   time.Duration
 }
+
+// minRetention matches the longest window the dashboard reports on. Keeping
+// less than that would silently make the 30-day figures wrong.
+const minRetention = 30 * 24 * time.Hour
 
 func loadConfig() (config, error) {
 	var missing []string
@@ -56,8 +62,18 @@ func loadConfig() (config, error) {
 		orgSlug:          get("ORG_SLUG"),
 		orgName:          get("ORG_NAME"),
 	}
+	retention := get("CHECK_RETENTION_DAYS")
 	if len(missing) > 0 {
 		return c, fmt.Errorf("missing required environment variables: %s", strings.Join(missing, ", "))
+	}
+
+	days, err := strconv.Atoi(retention)
+	if err != nil {
+		return c, fmt.Errorf("CHECK_RETENTION_DAYS must be a whole number of days, got %q", retention)
+	}
+	c.checkRetention = time.Duration(days) * 24 * time.Hour
+	if c.checkRetention < minRetention {
+		return c, fmt.Errorf("CHECK_RETENTION_DAYS must be at least 30, got %d", days)
 	}
 	return c, nil
 }
@@ -91,7 +107,7 @@ func run() error {
 
 	client, err := river.NewClient(riverpgxv5.New(pool), &river.Config{
 		Queues:       map[string]river.QueueConfig{river.QueueDefault: {MaxWorkers: max(4, runtime.NumCPU()*4)}},
-		Workers:      jobs.Workers(pool),
+		Workers:      jobs.Workers(pool, cfg.checkRetention),
 		PeriodicJobs: jobs.PeriodicJobs(),
 	})
 	if err != nil {

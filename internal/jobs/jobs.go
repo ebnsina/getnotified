@@ -16,14 +16,27 @@ import (
 	"github.com/fajrlabs/getnotified/internal/store"
 )
 
-// TickInterval bounds scheduling jitter, not the check interval itself.
-const TickInterval = 5 * time.Second
+const (
+	// TickInterval bounds scheduling jitter, not the check interval itself.
+	TickInterval = 5 * time.Second
+
+	// PruneInterval and pruneBatch together set how fast a backlog drains.
+	PruneInterval = time.Hour
+	pruneBatch    = 50_000
+)
 
 // ScheduleArgs sweeps the whole fleet on a fixed tick. One periodic job instead
 // of one per monitor means monitor CRUD needs no queue coordination.
 type ScheduleArgs struct{}
 
 func (ScheduleArgs) Kind() string { return "schedule" }
+
+// PruneArgs trims the checks table. Without it a long-running install grows
+// without limit — a monitor checked every 30 seconds writes about a million
+// rows a year.
+type PruneArgs struct{}
+
+func (PruneArgs) Kind() string { return "prune" }
 
 type CheckArgs struct {
 	MonitorID string `json:"monitor_id"`
@@ -58,6 +71,23 @@ func (w *ScheduleWorker) Work(ctx context.Context, _ *river.Job[ScheduleArgs]) e
 	return err
 }
 
+type PruneWorker struct {
+	river.WorkerDefaults[PruneArgs]
+	Pool      *pgxpool.Pool
+	Retention time.Duration
+}
+
+func (w *PruneWorker) Work(ctx context.Context, _ *river.Job[PruneArgs]) error {
+	deleted, err := store.PruneChecks(ctx, w.Pool, w.Retention, pruneBatch)
+	if err != nil {
+		return err
+	}
+	if deleted > 0 {
+		slog.Info("pruned old checks", "rows", deleted, "retention", w.Retention)
+	}
+	return nil
+}
+
 type CheckWorker struct {
 	river.WorkerDefaults[CheckArgs]
 	Pool *pgxpool.Pool
@@ -86,14 +116,20 @@ func (w *CheckWorker) Work(ctx context.Context, job *river.Job[CheckArgs]) error
 // transition persists the new state and, on a real flip, opens or closes the
 // incident and fans out notifications.
 func (w *CheckWorker) transition(ctx context.Context, m store.Monitor, res probe.Result) error {
-	status, failures, kind := NextState(m, res.OK)
+	var incidentID, kind string
 
-	var incidentID string
 	err := pgx.BeginFunc(ctx, w.Pool, func(tx pgx.Tx) error {
-		if err := store.SetMonitorState(ctx, tx, m.ID, status, failures); err != nil {
+		// Re-read under lock: the row may have moved since the probe started.
+		locked, err := store.LockMonitor(ctx, tx, m.ID)
+		if err != nil {
 			return err
 		}
-		var err error
+
+		status, failures, transition := NextState(locked, res.OK)
+		kind = transition
+		if err := store.SetMonitorState(ctx, tx, locked.ID, status, failures); err != nil {
+			return err
+		}
 		switch kind {
 		case "down":
 			incidentID, err = store.OpenIncident(ctx, tx, m.ID, res.Error)
@@ -169,11 +205,12 @@ func cancelIfGone(err error) error {
 	return err
 }
 
-func Workers(pool *pgxpool.Pool) *river.Workers {
+func Workers(pool *pgxpool.Pool, retention time.Duration) *river.Workers {
 	w := river.NewWorkers()
 	river.AddWorker(w, &ScheduleWorker{Pool: pool})
 	river.AddWorker(w, &CheckWorker{Pool: pool})
 	river.AddWorker(w, &NotifyWorker{Pool: pool})
+	river.AddWorker(w, &PruneWorker{Pool: pool, Retention: retention})
 	return w
 }
 
@@ -182,6 +219,11 @@ func PeriodicJobs() []*river.PeriodicJob {
 		river.NewPeriodicJob(
 			river.PeriodicInterval(TickInterval),
 			func() (river.JobArgs, *river.InsertOpts) { return ScheduleArgs{}, nil },
+			&river.PeriodicJobOpts{RunOnStart: true},
+		),
+		river.NewPeriodicJob(
+			river.PeriodicInterval(PruneInterval),
+			func() (river.JobArgs, *river.InsertOpts) { return PruneArgs{}, nil },
 			&river.PeriodicJobOpts{RunOnStart: true},
 		),
 	}

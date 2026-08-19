@@ -38,6 +38,12 @@ func validateMonitor(in store.MonitorInput, creating bool) error {
 	if in.TimeoutSeconds != nil && (*in.TimeoutSeconds < 1 || *in.TimeoutSeconds > 120) {
 		return Invalid("timeout_seconds", "Set a timeout between 1 and 120 seconds.")
 	}
+	// A check that can outlive its own schedule would overlap the next one.
+	if in.TimeoutSeconds != nil && in.IntervalSeconds != nil &&
+		*in.TimeoutSeconds > *in.IntervalSeconds {
+		return Invalid("timeout_seconds",
+			"Give up sooner than the gap between checks, so one check cannot run into the next.")
+	}
 	if in.FailureThreshold != nil && *in.FailureThreshold < 1 {
 		return Invalid("failure_threshold", "It takes at least one failure to open an incident.")
 	}

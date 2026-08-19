@@ -62,6 +62,13 @@ create table if not exists monitor_channels (
   primary key (monitor_id, channel_id)
 );
 
+-- A check must not outlive its own schedule, or one run overlaps the next.
+-- Enforced here so no caller can slip past it, including a partial update.
+update monitors set timeout_seconds = interval_seconds where timeout_seconds > interval_seconds;
+alter table monitors drop constraint if exists monitors_timeout_fits_interval;
+alter table monitors add constraint monitors_timeout_fits_interval
+  check (timeout_seconds <= interval_seconds);
+
 -- Row-level security. Policies bind to getnotified_app, so the owner role that
 -- runs migrations is unaffected and the app role is confined to app.org_id.
 do $$ begin

@@ -11,9 +11,19 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-// invalidTextRepresentation is what Postgres reports for a malformed uuid in a
-// path parameter — a bad address, not a server fault.
-const invalidTextRepresentation = "22P02"
+const (
+	// invalidTextRepresentation is what Postgres reports for a malformed uuid in
+	// a path parameter — a bad address, not a server fault.
+	invalidTextRepresentation = "22P02"
+	checkViolation            = "23514"
+)
+
+// constraintMessages give a database rule the same voice as the hand-written
+// checks, for the callers that reach it another way.
+var constraintMessages = map[string]*Error{
+	"monitors_timeout_fits_interval": Invalid("timeout_seconds",
+		"Give up sooner than the gap between checks, so one check cannot run into the next."),
+}
 
 // Error is the only shape this API ever returns for a failure. Message is
 // written for a person to read, so callers can surface it verbatim.
@@ -61,10 +71,15 @@ func Invalid(field, message string) *Error {
 // logged in full and reported as a generic message, never leaked.
 func write(w http.ResponseWriter, r *http.Request, err error) {
 	var apiErr *Error
+	var pgErr *pgconn.PgError
+
 	switch {
 	case errors.As(err, &apiErr):
 	case errors.Is(err, pgx.ErrNoRows):
 		apiErr = ErrNotFound
+	case errors.As(err, &pgErr) && pgErr.Code == checkViolation &&
+		constraintMessages[pgErr.ConstraintName] != nil:
+		apiErr = constraintMessages[pgErr.ConstraintName]
 	default:
 		slog.Error("request failed", "method", r.Method, "path", r.URL.Path, "err", err)
 		apiErr = ErrInternal

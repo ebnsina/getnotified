@@ -69,6 +69,16 @@ func GetMonitor(ctx context.Context, db Queryer, id string) (Monitor, error) {
 	return pgx.CollectExactlyOneRow(rows, pgx.RowToStructByName[Monitor])
 }
 
+// LockMonitor reads a monitor for update. The failure count is read, decided
+// on, and written, so the row has to be held for the whole decision.
+func LockMonitor(ctx context.Context, db Queryer, id string) (Monitor, error) {
+	rows, err := db.Query(ctx, `select `+monitorCols+` from monitors where id = $1 for update`, id)
+	if err != nil {
+		return Monitor{}, err
+	}
+	return pgx.CollectExactlyOneRow(rows, pgx.RowToStructByName[Monitor])
+}
+
 func CreateMonitor(ctx context.Context, db Queryer, orgID string, in MonitorInput) (Monitor, error) {
 	rows, err := db.Query(ctx, `
 		insert into monitors (org_id, name, type, target, interval_seconds, timeout_seconds,

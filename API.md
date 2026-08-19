@@ -75,7 +75,7 @@ checked in that window.
 | `target` | string | — | Required; a full URL for `http`, `host[:port]` otherwise |
 | `type` | string | `http` | `http`, `tcp`, or `ssl_expiry` |
 | `interval_seconds` | int | `60` | Minimum 10 |
-| `timeout_seconds` | int | `10` | 1–120 |
+| `timeout_seconds` | int | `10` | 1–120, and no longer than `interval_seconds` |
 | `expected_status` | int[] | `[200]` | HTTP only |
 | `ssl_warn_days` | int | `14` | `ssl_expiry` only |
 | `failure_threshold` | int | `2` | Consecutive failures before an incident opens |

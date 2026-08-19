@@ -45,6 +45,19 @@ All notable changes to GetNotified are recorded here. Format follows
 - Delivery failures are explained in plain words — nothing answered, it timed
   out, the address refused it — instead of socket wording.
 
+### Fixed
+
+- Consecutive failures could be undercounted. The count was read in one
+  statement and written in another, so two checks running at once could each
+  write back the same figure and an incident would open late. The monitor row
+  is now held for the whole decision.
+- A check could outlive the gap between checks, which is what let two run at
+  once. `timeout_seconds` may no longer exceed `interval_seconds`, enforced by
+  a database constraint as well as by the API, so a partial update cannot slip
+  past it either.
+- Check results are now trimmed on a schedule. The table previously grew
+  without limit.
+
 ### Changed
 
 - Every serif heading is italic, and the wordmark is set in the serif too.

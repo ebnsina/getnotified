@@ -59,6 +59,10 @@ database.
 channel gets its own job with its own retry budget, so a slow Slack never delays
 email.
 
+**Bounded growth.** A monitor checked every 30 seconds writes about a million
+check results a year, so an hourly job trims anything past
+`CHECK_RETENTION_DAYS` in batches. Incidents are small and are kept for good.
+
 **Isolation.** Every org-scoped table has a row-level security policy bound to
 the app role and keyed on `app.org_id`, which the connection pool pins at
 startup. With no org in scope the policies return nothing, so it fails closed.
