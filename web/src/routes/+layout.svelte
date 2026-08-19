@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { page } from '$app/state';
 	import Icon from '$lib/Icon.svelte';
-	import { DashboardSquare01Icon, Megaphone01Icon, Logout03Icon } from '@hugeicons/core-free-icons';
+	import { DashboardSquare01Icon, Notification01Icon, Logout03Icon } from '@hugeicons/core-free-icons';
 
 	let { children, data } = $props();
 
@@ -12,7 +12,7 @@
 
 	const nav = [
 		{ href: '/app', label: 'Monitors', icon: DashboardSquare01Icon },
-		{ href: '/app/channels', label: 'Notifications', icon: Megaphone01Icon }
+		{ href: '/app/channels', label: 'Notifications', icon: Notification01Icon }
 	];
 </script>
 
