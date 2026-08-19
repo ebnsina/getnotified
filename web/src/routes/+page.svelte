@@ -48,7 +48,7 @@
 
 <Shortcuts keys={{ d: entrance, s: '/status/default' }} />
 
-<div class="min-h-screen bg-night text-mid antialiased">
+<div class="landing min-h-screen bg-night text-mid antialiased">
 	<div class="mx-auto max-w-6xl border-x border-rule/60">
 		<header class="flex flex-wrap items-center justify-between gap-3 border-b border-rule px-6 py-4">
 			<a href="/" class="flex items-baseline gap-2">

@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/geist';
+@import '@fontsource-variable/inter-tight';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/newsreader';
 @import '@fontsource-variable/newsreader/wght-italic.css';
@@ -8,6 +9,8 @@
 	--font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
 	--font-mono: 'Geist Mono Variable', ui-monospace, monospace;
 	--font-display: 'Newsreader Variable', ui-serif, Georgia, serif;
+	/* The front page does brand work, so it gets its own text face. */
+	--font-landing: 'Inter Tight Variable', ui-sans-serif, system-ui, sans-serif;
 
 	/* Status colours are the product's own vocabulary, used as the accent. */
 	--color-up: oklch(0.74 0.15 152);
@@ -44,6 +47,10 @@ html {
 }
 
 @layer components {
+	.landing {
+		font-family: var(--font-landing);
+	}
+
 	/* Controls share one shape so the whole product feels like one instrument. */
 	.field {
 		width: 100%;

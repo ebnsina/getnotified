@@ -38,7 +38,10 @@ All notable changes to GetNotified are recorded here. Format follows
 
 ### Changed
 
-- Every serif heading is italic, matching the front page.
+- Every serif heading is italic, and the wordmark is set in the serif too.
+- The front page sets its text in Inter Tight; the dashboard keeps Geist, which
+  pairs with the mono it sits beside. The marketing surface and the working
+  surface each get the face that suits the job.
 - Form controls are custom drawn and defined once: fields, selects, checkboxes
   and buttons share one radius, one focus treatment, and one set of states.
 - One dark palette across the whole product, with Newsreader for headings,
