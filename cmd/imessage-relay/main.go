@@ -25,9 +25,14 @@ const script = `on run argv
 	set theRecipient to item 1 of argv
 	set theText to item 2 of argv
 	tell application "Messages"
-		set targetService to 1st account whose service type = iMessage
-		set targetBuddy to participant theRecipient of targetService
-		send theText to targetBuddy
+		set chosen to missing value
+		repeat with s in services
+			try
+				if (service type of s) is iMessage and (enabled of s) then set chosen to s
+			end try
+		end repeat
+		if chosen is missing value then error "no-imessage-account"
+		send theText to participant theRecipient of chosen
 	end tell
 end run`
 
@@ -125,6 +130,10 @@ func send(ctx context.Context, to, text string) error {
 	}
 
 	said := strings.TrimSpace(string(out))
+	if strings.Contains(said, "no-imessage-account") {
+		return errors.New("this Mac is not signed in to iMessage. Open Messages, then Settings, " +
+			"then iMessage, and sign in with your Apple ID.")
+	}
 	if strings.Contains(said, "-1743") || strings.Contains(said, "Not authorized") {
 		return errors.New("macOS has not allowed this program to control Messages. " +
 			"Open System Settings, then Privacy & Security, then Automation, and turn on " +

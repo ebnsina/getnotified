@@ -44,8 +44,9 @@ All notable changes to GetNotified are recorded here. Format follows
   message cannot execute anything.
 - A failed delivery now carries the far end's own explanation instead of just a
   status code, which is the whole point of being able to test a channel. The
-  iMessage relay recognises the two macOS refusals that matter and says what to
-  do about each.
+  iMessage relay recognises the three macOS refusals that matter — no Automation
+  permission, no iMessage account signed in, and an unrecognised recipient — and
+  says what to do about each.
 - Delivery failures are explained in plain words — nothing answered, it timed
   out, the address refused it — instead of socket wording.
 

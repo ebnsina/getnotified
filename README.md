@@ -91,7 +91,10 @@ Apple has no public iMessage API, so this one channel needs a Mac. Run
 RELAY_ADDR=127.0.0.1:8123 IMESSAGE_RELAY_KEY=… go run ./cmd/imessage-relay
 ```
 
-It exposes `POST /send` behind a bearer key and drives the Messages app. The
+It exposes `POST /send` behind a bearer key and drives the Messages app. That
+Mac needs two things: Messages signed in to iMessage, and Automation permission
+for the terminal running the relay (System Settings, Privacy & Security,
+Automation). The relay names whichever one is missing. The
 recipient and message are passed to AppleScript as arguments, never
 interpolated into it, so nothing in a message can be executed. Give the Mac
 Automation permission for Messages the first time it runs.
