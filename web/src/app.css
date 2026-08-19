@@ -51,6 +51,49 @@ html {
 		font-family: var(--font-landing);
 	}
 
+	/* Panels and pills carry the same radius as the controls inside them. */
+	.panel {
+		border: 1px solid var(--color-rule);
+		border-radius: 0.75rem;
+		background-color: var(--color-night-2);
+	}
+
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		border: 1px solid transparent;
+		border-radius: 999px;
+		padding: 0.15rem 0.6rem 0.2rem;
+		font-size: 0.75rem;
+		white-space: nowrap;
+	}
+
+	.pill::before {
+		content: '';
+		width: 0.4rem;
+		height: 0.4rem;
+		border-radius: 999px;
+		background-color: currentColor;
+	}
+
+	.pill-up {
+		border-color: color-mix(in oklab, var(--color-up) 30%, transparent);
+		background-color: color-mix(in oklab, var(--color-up) 12%, transparent);
+		color: var(--color-up);
+	}
+
+	.pill-down {
+		border-color: color-mix(in oklab, var(--color-down) 34%, transparent);
+		background-color: color-mix(in oklab, var(--color-down) 14%, transparent);
+		color: var(--color-down);
+	}
+
+	.pill-idle {
+		border-color: var(--color-rule);
+		color: var(--color-dim);
+	}
+
 	/* Controls share one shape so the whole product feels like one instrument. */
 	.field {
 		width: 100%;
@@ -165,15 +208,6 @@ html {
 	.btn-secondary:hover {
 		border-color: var(--color-dim);
 		background-color: var(--color-night-2);
-	}
-
-	.btn-quiet {
-		padding-inline: 0.4rem;
-		color: var(--color-dim);
-	}
-
-	.btn-quiet:hover {
-		color: var(--color-bright);
 	}
 
 	.btn-danger {

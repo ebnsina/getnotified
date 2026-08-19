@@ -36,7 +36,7 @@
 					{/each}
 				</nav>
 				<form method="POST" action="/logout" class="ml-auto">
-					<button class="btn btn-quiet btn-sm">
+					<button class="btn btn-secondary btn-sm">
 						<Icon icon={Logout03Icon} size={16} strokeWidth={1.5} />
 						Sign out
 					</button>

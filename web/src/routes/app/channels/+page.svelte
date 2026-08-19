@@ -33,11 +33,11 @@
 </p>
 
 {#if form?.message}
-	<p class="mt-4 rounded-md bg-night-2 px-3 py-2 text-sm text-mid">{form.message}</p>
+	<p class="mt-4 panel px-4 py-2.5 text-sm text-mid">{form.message}</p>
 {/if}
 
 {#if data.channels.length > 0}
-	<ul class="mt-6 divide-y divide-rule/60 rounded-lg border border-rule bg-night-2">
+	<ul class="mt-6 divide-y divide-rule/60 panel">
 		{#each data.channels as channel (channel.id)}
 			<li class="flex items-center justify-between gap-4 px-4 py-3 text-sm">
 				<div class="min-w-0">
@@ -57,7 +57,7 @@
 					</form>
 					<form method="POST" action="?/delete" use:enhance>
 						<input type="hidden" name="id" value={channel.id} />
-						<button aria-label="Remove {channel.name}" class="btn btn-quiet btn-sm">
+						<button aria-label="Remove {channel.name}" class="btn btn-secondary btn-sm">
 							<Icon icon={Delete02Icon} size={16} strokeWidth={1.5} />
 							Remove
 						</button>

@@ -47,6 +47,11 @@ All notable changes to GetNotified are recorded here. Format follows
 
 ### Fixed
 
+- The front page demo shifted the whole page each cycle. Failed bars are taller
+  than healthy ones, so the row grew the moment one appeared and everything
+  below it jumped. The row now reserves the tallest bar's height, and the
+  caption reserves its line.
+
 - Consecutive failures could be undercounted. The count was read in one
   statement and written in another, so two checks running at once could each
   write back the same figure and an incident would open late. The monitor row
@@ -60,6 +65,13 @@ All notable changes to GetNotified are recorded here. Format follows
 
 ### Changed
 
+- The front page now says what the product does: what it checks, where it tells
+  you, what you get, and an example of the API. It was atmosphere with no
+  substance before.
+- Status reads as a pill rather than a dot and a word, and panels share the
+  radius of the controls inside them.
+- Secondary buttons are outlined rather than ghosted, and the ghost variant is
+  gone. The status page link uses an arrow, not a chevron.
 - Every serif heading is italic, and the wordmark is set in the serif too.
 - The front page sets its text in Inter Tight; the dashboard keeps Geist, which
   pairs with the mono it sits beside. The marketing surface and the working

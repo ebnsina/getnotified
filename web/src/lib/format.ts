@@ -73,8 +73,8 @@ export function list(locale: string, items: string[]): string {
 	return new Intl.ListFormat(locale, { style: 'short', type: 'conjunction' }).format(items);
 }
 
-export const dotClass = (status: Status, paused = false) =>
-	paused ? 'bg-idle' : status === 'up' ? 'bg-up' : status === 'down' ? 'bg-down' : 'bg-idle';
+export const pillClass = (status: Status, paused = false) =>
+	paused ? 'pill pill-idle' : status === 'up' ? 'pill pill-up' : status === 'down' ? 'pill pill-down' : 'pill pill-idle';
 
 export const statusLabel = (status: Status, paused = false) =>
 	paused ? 'Paused' : status === 'up' ? 'Up' : status === 'down' ? 'Down' : 'Not checked yet';

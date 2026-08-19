@@ -33,6 +33,6 @@
 		<button class="btn btn-primary">
 			Create monitor
 		</button>
-		<a href="/app" class="btn btn-quiet">Cancel</a>
+		<a href="/app" class="btn btn-secondary">Cancel</a>
 	</div>
 </form>

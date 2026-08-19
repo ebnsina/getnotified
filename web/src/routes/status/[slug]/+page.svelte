@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Meta from '$lib/Meta.svelte';
-	import { dateTime, dotClass, duration, percent, relative, statusLabel } from '$lib/format';
+	import { dateTime, duration, percent, pillClass, relative, statusLabel } from '$lib/format';
 
 	let { data } = $props();
 
@@ -27,16 +27,13 @@
 	{summary} Last checked {relative(data.locale, status.as_of)}.
 </p>
 
-<div class="mt-6 divide-y divide-rule/60 rounded-lg border border-rule bg-night-2">
+<div class="mt-6 divide-y divide-rule/60 panel">
 	{#each listed as monitor (monitor.id)}
 		<div class="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm">
-			<span class="flex items-center gap-2">
-				<span class="size-2 rounded-full {dotClass(monitor.status)}"></span>
-				{monitor.name}
-			</span>
-			<span class="text-dim">
-				{statusLabel(monitor.status)} ·
-				<span class="numeric">{percent(data.locale, monitor.up_30d)}</span> over 30 days
+			<span class="text-bright">{monitor.name}</span>
+			<span class="flex items-center gap-3">
+				<span class="numeric text-dim">{percent(data.locale, monitor.up_30d)} over 30 days</span>
+				<span class={pillClass(monitor.status)}>{statusLabel(monitor.status)}</span>
 			</span>
 		</div>
 	{:else}
@@ -51,7 +48,7 @@
 	{:else}
 		<ul class="mt-2 space-y-2 text-sm">
 			{#each status.incidents as incident (incident.id)}
-				<li class="rounded-lg border border-rule bg-night-2 px-4 py-3">
+				<li class="panel px-4 py-3">
 					<span class="font-medium">
 						{status.monitors.find((monitor) => monitor.id === incident.monitor_id)?.name ??
 							'A service'}

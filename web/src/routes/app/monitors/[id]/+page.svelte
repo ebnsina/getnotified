@@ -4,7 +4,7 @@
 	import MonitorForm from '$lib/MonitorForm.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import { PlayIcon, PauseIcon, Delete02Icon } from '@hugeicons/core-free-icons';
-	import { dateTime, dotClass, duration, milliseconds, relative, statusLabel } from '$lib/format';
+	import { dateTime, duration, milliseconds, pillClass, relative, statusLabel } from '$lib/format';
 	import { validateMonitorForm } from '$lib/schemas';
 
 	let { data, form } = $props();
@@ -29,13 +29,12 @@
 
 <div class="flex items-start justify-between gap-4">
 	<div>
-		<h1 class="flex items-center gap-2 font-display text-2xl font-normal text-bright italic">
-			<span class="size-2.5 rounded-full {dotClass(monitor.status, monitor.paused)}"></span>
-			{monitor.name}
-		</h1>
-		<p class="mt-1 text-sm text-dim">
-			{statusLabel(monitor.status, monitor.paused)} ·
-			<span class="font-mono">{monitor.target}</span>
+		<h1 class="font-display text-2xl font-normal text-bright italic">{monitor.name}</h1>
+		<p class="mt-2 flex flex-wrap items-center gap-2 text-sm text-dim">
+			<span class={pillClass(monitor.status, monitor.paused)}>
+				{statusLabel(monitor.status, monitor.paused)}
+			</span>
+			<span class="font-mono text-xs">{monitor.target}</span>
 		</p>
 	</div>
 	<form method="POST" action="?/pause" use:enhance>
@@ -50,7 +49,7 @@
 </div>
 
 {#if form?.message}
-	<p class="mt-4 rounded-md bg-night-2 px-3 py-2 text-sm text-mid">{form.message}</p>
+	<p class="mt-4 panel px-4 py-2.5 text-sm text-mid">{form.message}</p>
 {/if}
 
 <section class="mt-8">
@@ -74,7 +73,7 @@
 	{#if data.incidents.length === 0}
 		<p class="mt-2 text-sm text-dim">No incidents so far.</p>
 	{:else}
-		<ul class="mt-2 divide-y divide-rule/60 rounded-lg border border-rule bg-night-2">
+		<ul class="mt-2 divide-y divide-rule/60 panel">
 			{#each data.incidents as incident (incident.id)}
 				<li class="flex flex-wrap items-baseline justify-between gap-2 px-4 py-3 text-sm">
 					<div>

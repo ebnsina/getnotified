@@ -42,19 +42,21 @@
 		<span class="font-mono text-xs text-dim">Opens an incident after 2 failures</span>
 	</figcaption>
 
-	<div class="flex items-end gap-[3px] px-5 py-10" aria-hidden="true">
-		{#each { length: TOTAL } as _, index (index)}
-			<span
-				class="w-full rounded-[1px] transition-[height] duration-200 {index > cursor
-					? 'h-8 bg-night-2'
-					: failed(index)
-						? 'h-14 bg-down'
-						: 'h-8 bg-up'}"
-			></span>
-		{/each}
+	<div class="px-5 py-10">
+		<div class="flex h-14 items-end gap-[3px]" aria-hidden="true">
+			{#each { length: TOTAL } as _, index (index)}
+				<span
+					class="w-full rounded-[1px] transition-[height] duration-200 {index > cursor
+						? 'h-8 bg-night-2'
+						: failed(index)
+							? 'h-14 bg-down'
+							: 'h-8 bg-up'}"
+				></span>
+			{/each}
+		</div>
 	</div>
 
-	<p class="border-t border-rule px-5 py-3 font-mono text-xs">
+	<p class="flex min-h-12 items-center border-t border-rule px-5 py-3 font-mono text-xs">
 		<span class={note.tone === 'down' ? 'text-down' : note.tone === 'up' ? 'text-up' : 'text-dim'}>
 			{note.text}
 		</span>
